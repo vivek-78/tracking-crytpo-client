@@ -10,8 +10,19 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
 import CryptoNews from "./CryptoNews";
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel'; 
+import WatchList from "./WatchList";
 
 const CryptoTable = () => {
+  const [watchList, setWatchList] = useState([]);
+  const [value, setValue] = useState('1');
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
     const [newsData, setNewsData] = useState({});
     var settings = {
     dots: true,
@@ -31,6 +42,30 @@ const CryptoTable = () => {
     }
     fetchData();
   });
+
+  const temp =[]
+  const handleWatchListClick = (coin) =>{
+    if(!(watchList.includes(coin))){
+    setWatchList([...watchList, coin])
+    temp.push(coin)
+    console.log(temp)
+    localStorage.setItem('watchlist',JSON.stringify(temp))
+    }
+  }
+
+  const handleRemoveCoin = (coin) =>{
+    const newWatch = watchList.filter((watch)=> watch !== coin)
+    setWatchList(newWatch)
+    localStorage.setItem('watchlist',JSON.stringify(newWatch))
+  }
+
+  useEffect(()=>{
+  const storedWatchList = JSON.parse(localStorage.getItem('watchlist'))
+  if(storedWatchList) setWatchList(storedWatchList)
+  },[])
+
+
+
   const coins = [
     "BTC",
     "ETH",
@@ -78,7 +113,16 @@ const CryptoTable = () => {
       >
         Today's Cryptocurrency Prices
       </Typography>
-      <table>
+      <Box sx={{ width: '100%', typography: 'body1' }}>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} >
+            <Tab label="Crypto Coins" value="1" />
+            <Tab label="Watch List" value="2" />
+          </TabList>
+        </Box>
+        <TabPanel value="1">
+        <table>
         <thead>
           <tr>
             <th>Name</th>
@@ -88,14 +132,39 @@ const CryptoTable = () => {
             <th>Lowest Today</th>
             <th>MARKET CAP</th>
             <th>7D chart</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {coins.map((coin) => (
-            <CryptoList coin={coin} key={coin} />
+          {coins?.map((coin) => (
+            <CryptoList coin={coin} key={coin} handleClick={handleWatchListClick} />
           ))}
         </tbody>
       </table>
+        </TabPanel>
+        <TabPanel value="2">
+        <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Change%</th>
+            <th>Highest Today</th>
+            <th>Lowest Today</th>
+            <th>MARKET CAP</th>
+            <th>7D chart</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {watchList?.map((coin) => (
+            <WatchList coin={coin} key={coin} handleWatchClick={handleRemoveCoin} />
+          ))}
+        </tbody>
+      </table>
+        </TabPanel>
+      </TabContext>
+    </Box>
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 
 const CryptoDetail = () => {
   const { coin } = useParams();
-  const [chartData, setChartData] = useState({});
+  const [chartData, setChartData] = useState([]);
   useEffect(() => {
     function fetchData() {
       axios
@@ -15,7 +15,7 @@ const CryptoDetail = () => {
         )
         .then((fetchedData) => {
           const data = fetchedData.data.Data.Data;
-          setChartData(data.map((item) => [item.time * 1000, item.close]));
+          setChartData(Object.keys(data).map((item) => [data[item].time * 1000, data[item].close]));
         });
     }
     fetchData();
@@ -30,7 +30,7 @@ const CryptoDetail = () => {
           series={[
             {
               name: coin,
-              data: chartData
+              data: chartData || []
             }
           ]}
           options={{

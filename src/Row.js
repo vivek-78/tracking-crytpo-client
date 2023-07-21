@@ -3,17 +3,20 @@ import axios from "axios";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom';
 import { Typography } from "@mui/material";
+import { Button } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 var previousValue = 0;
 
 const CryptoList = (props) => {
-  const { coin } = props;
+  const { coin, handleClick } = props;
+  // const [watchList, setWatchList] = useState([]);
   const [coinData, setCoinData] = useState({});
   const navigate = useNavigate();
   const [priceColor, setPriceColor] = useState();
   var percentColor;
-    const handleRowClick = () => {
-      navigate(`/${coin}`);
-    };
+  const handleRowClick = () => {
+    navigate(`/${coin}`);
+  };
   function setPriceChange(originalPrice) {
     let trimmedPrice = originalPrice?.substring(2);
     let parsedPrice = parseFloat(trimmedPrice?.replace(/,/g, ""));
@@ -55,9 +58,10 @@ const CryptoList = (props) => {
         <tr
           key={coin}
           style={{ cursor: "pointer" }}
-            onClick={handleRowClick}
         >
-          <td>
+          <td
+            onClick={handleRowClick}
+          >
             <img
               src={`https://www.cryptocompare.com${coinData.IMAGEURL}`}
               width={40}
@@ -66,7 +70,9 @@ const CryptoList = (props) => {
             />
             {coin}
           </td>
-          <td style={{ color: priceColor }}>
+          <td 
+          onClick={handleRowClick}
+          style={{ color: priceColor }}>
             <Typography>
               {coinData.PRICE}
               {priceColor === "#00FF00" ? (
@@ -76,7 +82,9 @@ const CryptoList = (props) => {
               )}
             </Typography>
           </td>
-          <td style={{ color: percentColor }}>
+          <td 
+          onClick={handleRowClick}
+          style={{ color: percentColor }}>
             <Typography sx={{ fontWeight: 500 }}>
               {coinData.CHANGEPCTDAY}%{""}
               {coinData.CHANGEPCTDAY > 0 ? (
@@ -86,20 +94,25 @@ const CryptoList = (props) => {
               )}
             </Typography>
           </td>
-          <td>
+          <td
+          onClick={handleRowClick}
+          >
             <Typography>{coinData.HIGH24HOUR}</Typography>
           </td>
-          <td align="center" sx={{ padding: "0px 0px 0px 0px" }}>
+          <td align="center" onClick={handleRowClick} sx={{ padding: "0px 0px 0px 0px" }}>
             <Typography>{coinData.LOW24HOUR}</Typography>
           </td>
-          <td>
+          <td onClick={handleRowClick}>
             <Typography>{coinData.MKTCAP}</Typography>
           </td>
-          <td>
+          <td onClick={handleRowClick}>
             <img
               src={`https://images.cryptocompare.com/sparkchart/${coin}/USD/latest.png?ts=1687842000`}
               alt={coin}
             />
+          </td>
+          <td>
+            <Button variant="outlined" color={"success"} onClick={() => handleClick(coin)} startIcon={<AddIcon/>}>Watch List</Button>
           </td>
         </tr>
       )}
