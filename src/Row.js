@@ -1,19 +1,19 @@
 import { React, useState, useEffect } from "react";
 import axios from "axios";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Typography } from "@mui/material";
 var previousValue = 0;
 
 const CryptoList = (props) => {
   const { coin } = props;
-  //   const navigate = useNavigate();
   const [coinData, setCoinData] = useState({});
+  const navigate = useNavigate();
   const [priceColor, setPriceColor] = useState();
   var percentColor;
-  //   const handleRowClick = () => {
-  //     navigate(`/crypto/${coin}`);
-  //   };
+    const handleRowClick = () => {
+      navigate(`/${coin}`);
+    };
   function setPriceChange(originalPrice) {
     let trimmedPrice = originalPrice?.substring(2);
     let parsedPrice = parseFloat(trimmedPrice?.replace(/,/g, ""));
@@ -31,7 +31,6 @@ const CryptoList = (props) => {
   } else {
     percentColor = "#FF0000";
   }
-
   useEffect(() => {
     async function fetchData() {
       const fetchedData = await axios.get(
@@ -56,7 +55,7 @@ const CryptoList = (props) => {
         <tr
           key={coin}
           style={{ cursor: "pointer" }}
-          //   onClick={handleRowClick}
+            onClick={handleRowClick}
         >
           <td>
             <img
@@ -101,7 +100,6 @@ const CryptoList = (props) => {
               src={`https://images.cryptocompare.com/sparkchart/${coin}/USD/latest.png?ts=1687842000`}
               alt={coin}
             />
-            {/* {<MiniCoinChart coin={coin} color={percentColor} />} */}
           </td>
         </tr>
       )}

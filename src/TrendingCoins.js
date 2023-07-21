@@ -33,6 +33,7 @@ const TrendingCoins = () => {
         </thead>
         <tbody>
           {trendingCoins?.map((coin) => (
+            coin!=="PEPE2.0"??
             <CryptoList coin={coin} key={coin} />
           ))}
         </tbody>
