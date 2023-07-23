@@ -84,29 +84,6 @@ const CryptoTable = () => {
   ];
   return (
     <div className="cryptoTable">
-      <Grid item xs={12} sx={{ textAlign: "center" }}>
-        <Typography variant="h5">Latest News</Typography> <br />
-      </Grid>
-      <Grid sx={{ marginLeft: 0, marginBottom: 2 }}>
-        <Slider {...settings}>
-          {Array.isArray(newsData)
-            ? newsData.map((data) => (
-                <div key={data.id}>
-                  <CryptoNews
-                    count={++count}
-                    src={data.source_info.name}
-                    title={data.title}
-                    url={data.url}
-                    image={data.imageurl}
-                  />
-                </div>
-              ))
-            : ""}
-        </Slider>
-      </Grid>
-      <TopGainers />
-      <TopLosers />
-      <TrendingCoins />
       <Typography
         variant="h6"
         sx={{ marginLeft: "20px", marginBottom: "10px", fontWeight: 550 }}
