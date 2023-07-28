@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Grid, Typography } from "@mui/material";
+import React from "react";
 import TopGainers from "./TopGainers";
 import TopLosers from "./TopLosers";
 import CryptoTable from "./CryptoTable";
