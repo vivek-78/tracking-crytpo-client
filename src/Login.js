@@ -2,20 +2,24 @@ import { React, useState, useEffect } from "react";
 import axios from "axios";
 import { Grid, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch,useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import "./Login.css"
+import {setWatchList} from "./store/WatchListSlice";
+import {setAuthToken} from "./store/authTokenSlice";
+import "./Login.css" 
 
 const Login2 = () => {
   const [userId, setUserId] = useState();
   const [password, setPassword] = useState();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const authToken = useSelector(state => state.AuthToken);
+  
   useEffect(() => {
-    const authToken = Cookies.get("UserToken");
     if (authToken) {
       navigate("/");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log(authToken);
   }, []);
   const handleSumbit = async () => {
     try {
@@ -23,10 +27,11 @@ const Login2 = () => {
         userId,
         password,
       });
-      console.log(fetchedToken);
-      Cookies.set("UserToken", fetchedToken.data.token);
+      dispatch(setWatchList({watchList:fetchedToken.data.watchList}));
+      dispatch(setAuthToken({authToken:fetchedToken.data.token}));
       navigate("/");
-    } catch {
+    } catch(err){
+      console.log(err);
       alert("enter valid details");
     }
   };
