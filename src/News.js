@@ -26,10 +26,10 @@ const News = ()=>{
     var count = 0;
     return(
      <>
-      <Grid item xs={12} sx={{ textAlign: "center",marginBottom:"20px" }}>
+      <Grid item xs={12} sx={{ marginBottom:"10px" }}>
       <Typography
         variant="h6"
-        sx={{ marginLeft: "20px", marginBottom: "10px", fontWeight: 550 }}
+        sx={{ marginLeft: "20px", fontWeight: 550 }}
       >
         Latest News
       </Typography>

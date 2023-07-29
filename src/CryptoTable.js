@@ -45,7 +45,6 @@ const CryptoTable = () => {
       fetchWatchList();
   }
 
-
   const handleRemoveCoin = (coin) =>{
     axios.post("http://localhost:8080/removeFromWatchlist",{
       headers:{
@@ -73,10 +72,59 @@ const CryptoTable = () => {
     "DASH",
   ];
   return (
+    <>
+    {watchList.length < 0 && (<div className="cryptoTable">
+    <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Change%</th>
+            <th>Highest Today</th>
+            <th>Lowest Today</th>
+            <th>MARKET CAP</th>
+            <th>7D chart</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {watchList.map((coin) => (
+            <WatchList coin={coin} key={coin} handleWatchClick={handleRemoveCoin} />
+          ))}
+        </tbody>
+      </table>
+    </div>)}
+    <Typography
+        variant="h6"
+        sx={{ marginLeft: "20px", marginBottom: "10px", fontWeight: 550 }}
+      >
+        Your WatchList
+      </Typography>
+    <div className="cryptoTable">
+    <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Change%</th>
+            <th>Highest Today</th>
+            <th>Lowest Today</th>
+            <th>MARKET CAP</th>
+            <th>7D chart</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {watchList.map((coin) => (
+            <WatchList coin={coin} key={coin} handleWatchClick={handleRemoveCoin} />
+          ))}
+        </tbody>
+      </table>
+    </div>
     <div className="cryptoTable">
       <Typography
         variant="h6"
-        sx={{ marginLeft: "20px", marginBottom: "10px", fontWeight: 550, textAlign: "center" }}
+        sx={{ marginLeft: "20px", marginBottom: "10px", fontWeight: 550 }}
       >
         Today's Cryptocurrency Prices
       </Typography>
@@ -133,6 +181,7 @@ const CryptoTable = () => {
       </TabContext>
     </Box>
     </div>
+    </>
   );
 };
 export default CryptoTable;
