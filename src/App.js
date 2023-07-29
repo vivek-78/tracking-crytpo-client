@@ -1,4 +1,3 @@
-import CryptoTable from './CryptoTable';
 import "./App.css";
 import Navbar from "./NavBar";
 import Login from './Login';

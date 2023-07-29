@@ -11,11 +11,11 @@ const Login2 = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const authToken = Cookies.get("jwtToken");
-    console.log(authToken);
+    const authToken = Cookies.get("UserToken");
     if (authToken) {
-      navigate("/home");
+      navigate("/");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleSumbit = async () => {
     try {
