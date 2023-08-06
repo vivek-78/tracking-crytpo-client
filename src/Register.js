@@ -4,21 +4,20 @@ import { Grid, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch,useSelector } from "react-redux";
 import {setWatchList} from "./store/WatchListSlice";
-import {setAuthToken} from "./store/authTokenSlice";
 import { toast } from 'react-toastify';
+import {setAuthToken} from "./store/authTokenSlice";
 import "./Login.css" 
 
-const Login = () => {
+const Register = () => {
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
+  const [email, setEmail] = useState();
   const [userId, setUserId] = useState();
   const [password, setPassword] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.AuthToken.isLoggedIn);
-  const showToastMessage = () => {
-    toast.success('Login Successfull', {
-        position: toast.POSITION.TOP_RIGHT
-    });
-};
+  
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
@@ -26,17 +25,20 @@ const Login = () => {
   }, []);
   const handleSumbit = async () => {
     try {
-      const fetchedToken = await axios.post("http://localhost:8080/login", {
+      const fetchedToken = await axios.post("http://localhost:8080/register", {
+        firstName,
+        lastName,
+        email,
         userId,
         password,
       });
-      dispatch(setWatchList({watchList:fetchedToken.data.watchList}));
       dispatch(setAuthToken({authToken:fetchedToken.data.token}));
-      showToastMessage();
       navigate("/");
     } catch(err){
       console.log(err);
-      alert("enter valid details");
+      toast.error(err?.response?.data?.message, {
+        position: toast.POSITION.TOP_RIGHT
+    });
     }
   };
   return (
@@ -48,7 +50,7 @@ const Login = () => {
       justifyContent="center"
       alignItems="center"
       sx={{
-        marginTop:"90px",
+        marginTop:"50px",
         backgroundColor: "white",
         boxShadow: "0 3px 4px rgba(0, 0, 0, 0.1)",
         padding: "20px",
@@ -71,20 +73,44 @@ const Login = () => {
           spacing={2}
           xs={6}
         >
-          {/* <Grid
-            item
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-            spacing={1}
-            sx={{ marginBottom: "20px" }}
-          >
-            <h3 style={{ margin: "0px" }}>Tracking Crypto</h3>
-            <h3 style={{ margin: "0px" }}>LOGIN</h3>
-          </Grid> */}
           <Grid item>
-          <Typography variant="h4" sx={{ fontWeight: "bold",marginBottom:"5px" }}>Login</Typography>
+          <Typography variant="h4" sx={{ fontWeight: "bold",marginBottom:"5px" }}>Register</Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ fontWeight: "normal",marginBottom:"5px" }}>First Name</Typography>
+            <input
+              className="btn"
+              type="text"
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
+              placeholder="enter your user Id"
+              style={{ width: "300px" }}
+            />
+          </Grid>
+          <Grid item>
+            <Typography sx={{ fontWeight: "normal",marginBottom:"5px" }}>Last Name</Typography>
+            <input
+              className="btn"
+              type="text"
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
+              placeholder="enter your user Id"
+              style={{ width: "300px" }}
+            />
+          </Grid>
+          <Grid item>
+            <Typography sx={{ fontWeight: "normal",marginBottom:"5px" }}>User Id</Typography>
+            <input
+              className="btn"
+              type="text"
+              onChange={(e) => {
+                setUserId(e.target.value);
+              }}
+              placeholder="enter your user Id"
+              style={{ width: "300px" }}
+            />
           </Grid>
           <Grid item>
             <Typography sx={{ fontWeight: "normal",marginBottom:"5px" }}>Your Email</Typography>
@@ -92,7 +118,7 @@ const Login = () => {
               className="btn"
               type="text"
               onChange={(e) => {
-                setUserId(e.target.value);
+                setEmail(e.target.value);
               }}
               placeholder="enter your user Id"
               style={{ width: "300px" }}
@@ -122,11 +148,11 @@ const Login = () => {
                 color: "white"
               }}
             >
-              Login
+              Register
             </Button>
           </Grid>
           <Grid item>
-            <Typography sx={{fontWeight: "normal",width:"300px",marginLeft:"40px"}}>Dont have account? <a href="/register">Register here</a></Typography>
+            <Typography sx={{fontWeight: "normal",width:"300px",marginLeft:"40px"}}>already have an account? <a href="/login">Login here</a></Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -136,4 +162,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

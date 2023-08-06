@@ -1,14 +1,18 @@
 import { React, useState, useEffect } from "react";
 import axios from "axios";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { useSelector, useDispatch } from "react-redux";
+import { addCoin, removeCoin } from "./store/WatchListSlice";
+
 var previousValue = 0;
 
 const CryptoList = (props) => {
-  const { coin, handleClick } = props;
+  const { coin, handleClick, isWatchList } = props;
   // const [watchList, setWatchList] = useState([]);
   const [coinData, setCoinData] = useState({});
   const navigate = useNavigate();
@@ -16,6 +20,17 @@ const CryptoList = (props) => {
   var percentColor;
   const handleRowClick = () => {
     navigate(`/${coin}`);
+  };
+  const dispatch = useDispatch();
+  const authToken = useSelector(state=>state.AuthToken.authToken);
+  const handleRemoveCoin = async (coin) => {
+    dispatch(removeCoin({ coin }));
+    await axios.post("http://localhost:8080/removeFromWatchlist", {
+      headers: {
+        authorization: authToken,
+      },
+      coin: coin,
+    });
   };
   function setPriceChange(originalPrice) {
     let trimmedPrice = originalPrice?.substring(2);
@@ -55,13 +70,8 @@ const CryptoList = (props) => {
       {coinData === null ? (
         <></>
       ) : (
-        <tr
-          key={coin}
-          style={{ cursor: "pointer" }}
-        >
-          <td
-            onClick={handleRowClick}
-          >
+        <tr key={coin} style={{ cursor: "pointer" }}>
+          <td onClick={handleRowClick}>
             <img
               src={`https://www.cryptocompare.com${coinData.IMAGEURL}`}
               width={40}
@@ -70,9 +80,7 @@ const CryptoList = (props) => {
             />
             {coin}
           </td>
-          <td 
-          onClick={handleRowClick}
-          style={{ color: priceColor }}>
+          <td onClick={handleRowClick} style={{ color: priceColor }}>
             <Typography>
               {coinData.PRICE}
               {priceColor === "#00FF00" ? (
@@ -82,9 +90,7 @@ const CryptoList = (props) => {
               )}
             </Typography>
           </td>
-          <td 
-          onClick={handleRowClick}
-          style={{ color: percentColor }}>
+          <td onClick={handleRowClick} style={{ color: percentColor }}>
             <Typography sx={{ fontWeight: 500 }}>
               {coinData.CHANGEPCTDAY}%{""}
               {coinData.CHANGEPCTDAY > 0 ? (
@@ -94,12 +100,14 @@ const CryptoList = (props) => {
               )}
             </Typography>
           </td>
-          <td
-          onClick={handleRowClick}
-          >
+          <td onClick={handleRowClick}>
             <Typography>{coinData.HIGH24HOUR}</Typography>
           </td>
-          <td align="center" onClick={handleRowClick} sx={{ padding: "0px 0px 0px 0px" }}>
+          <td
+            align="center"
+            onClick={handleRowClick}
+            sx={{ padding: "0px 0px 0px 0px" }}
+          >
             <Typography>{coinData.LOW24HOUR}</Typography>
           </td>
           <td onClick={handleRowClick}>
@@ -112,7 +120,25 @@ const CryptoList = (props) => {
             />
           </td>
           <td>
-            <Button variant="outlined" color={"success"} onClick={() => handleClick(coin)} startIcon={<AddIcon/>}>Watch List</Button>
+            {isWatchList ? (
+              <Button
+                variant="outlined"
+                color={"error"}
+                onClick={() => handleRemoveCoin(coin)}
+                startIcon={<RemoveIcon />}
+              >
+                Watch List
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                color={"success"}
+                onClick={() => handleClick(coin)}
+                startIcon={<AddIcon />}
+              >
+                Watch List
+              </Button>
+            )}{" "}
           </td>
         </tr>
       )}
