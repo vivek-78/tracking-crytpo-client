@@ -1,7 +1,19 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Grid, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { removeAuthToken } from "./store/authTokenSlice";
+import { removeWatchList } from "./store/WatchListSlice";
+import { useDispatch,useSelector } from "react-redux";
 
 function NavBar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => state.AuthToken.isLoggedIn);
+  const handleClick = ()=>{
+     dispatch(removeAuthToken());
+     dispatch(removeWatchList());
+     navigate("/login");
+  }
   return (
     <AppBar
       position="static"
@@ -12,7 +24,7 @@ function NavBar() {
         <Grid
           container
           direction="row"
-          justifyContent="flex-start"
+          justifyContent="space-between"
           alignItems="center"
         >
           <Grid item>
@@ -23,6 +35,9 @@ function NavBar() {
               Tracking Crypto
             </Typography>
           </Grid>
+          {isLoggedIn && <Grid item>
+          <Button variant="outlined" onClick={() => handleClick()}>Log Out</Button>
+          </Grid>}
         </Grid>
       </Toolbar>
     </AppBar>

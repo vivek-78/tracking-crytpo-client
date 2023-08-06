@@ -17,8 +17,6 @@ export default function graph() {
         fetchData();
       });
   return (
-    <polyline 
-    points = {...prices}
-    />
+    <polyline points = {...prices}/>
   )
 }

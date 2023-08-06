@@ -13,40 +13,52 @@ import Cookies from "js-cookie";
 import WatchList from "./WatchList";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import { addCoin, removeCoin } from "./store/WatchListSlice";
 
 const CryptoTable = () => {
-  const authToken = Cookies.get("UserToken");
+  const authToken = useSelector(state=>state.AuthToken.authToken);
   const [watchList, setWatchList] = useState([]);
-  const [watchList2, setWatchList2] = useState([useSelector(state => state.watchList)]);
+  const watchList2 = useSelector((state) => state.WatchList.watchList);
+  const dispatch = useDispatch();
   const [value, setValue] = useState("1");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const fetchWatchList = async () => {
-    const fetchedData = await axios.post("http://localhost:8080/watchList", {
-      headers: {
-        authorization: authToken,
-      },
-    });
-    const temp = fetchedData?.data;
-    setWatchList(temp);
+    try {
+      const fetchedData = await axios.post("http://localhost:8080/watchList", {
+        headers: {
+          authorization: authToken,
+        },
+      });
+      const temp = fetchedData?.data;
+      setWatchList(temp);
+    } catch (err) {
+      alert(err);
+    }
   };
   useEffect(() => {
     fetchWatchList();
   }, []);
 
-  const handleWatchListClick = (coin) => {
-    axios.post("http://localhost:8080/addToWatchlist", {
-      headers: {
-        authorization: authToken,
-      },
-      coin: coin,
-    });
-    fetchWatchList();
+  const handleWatchListClick = async (coin) => {
+    try {
+      dispatch(addCoin({ coin }));
+      await axios.post("http://localhost:8080/addToWatchlist", {
+        headers: {
+          authorization: authToken,
+        },
+        coin: coin,
+      });
+      fetchWatchList();
+    } catch (err) {
+      alert(err);
+    }
   };
 
-  const handleRemoveCoin = (coin) => {
-    axios.post("http://localhost:8080/removeFromWatchlist", {
+  const handleRemoveCoin = async (coin) => {
+    dispatch(removeCoin({ coin }));
+    await axios.post("http://localhost:8080/removeFromWatchlist", {
       headers: {
         authorization: authToken,
       },
@@ -73,64 +85,41 @@ const CryptoTable = () => {
   ];
   return (
     <>
-      {watchList2.length < 0 && (
-        <div className="cryptoTable">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Change%</th>
-                <th>Highest Today</th>
-                <th>Lowest Today</th>
-                <th>MARKET CAP</th>
-                <th>7D chart</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {watchList.map((coin) => (
-                <WatchList
-                  coin={coin}
-                  key={coin}
-                  handleWatchClick={handleRemoveCoin}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {watchList2?.length > 0 && (
+        <>
+          <Typography
+            variant="h6"
+            sx={{ marginLeft: "20px", marginBottom: "10px", fontWeight: 550 }}
+          >
+            Your WatchList
+          </Typography>
+          <div className="cryptoTable">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Change%</th>
+                  <th>Highest Today</th>
+                  <th>Lowest Today</th>
+                  <th>MARKET CAP</th>
+                  <th>7D chart</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {watchList.map((coin) => (
+                  <WatchList
+                    coin={coin}
+                    key={coin}
+                    handleWatchClick={handleRemoveCoin}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
-      <Typography
-        variant="h6"
-        sx={{ marginLeft: "20px", marginBottom: "10px", fontWeight: 550 }}
-      >
-        Your WatchList
-      </Typography>
-      <div className="cryptoTable">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Change%</th>
-              <th>Highest Today</th>
-              <th>Lowest Today</th>
-              <th>MARKET CAP</th>
-              <th>7D chart</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {watchList.map((coin) => (
-              <WatchList
-                coin={coin}
-                key={coin}
-                handleWatchClick={handleRemoveCoin}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
       <div className="cryptoTable">
         <Typography
           variant="h6"
@@ -166,6 +155,7 @@ const CryptoTable = () => {
                       coin={coin}
                       key={coin}
                       handleClick={handleWatchListClick}
+                      isWatchList={watchList2.includes(coin)}
                     />
                   ))}
                 </tbody>
