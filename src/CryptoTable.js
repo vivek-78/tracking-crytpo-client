@@ -9,7 +9,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import WatchList from "./WatchList";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -39,6 +39,7 @@ const CryptoTable = () => {
   };
   useEffect(() => {
     fetchWatchList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleWatchListClick = async (coin) => {

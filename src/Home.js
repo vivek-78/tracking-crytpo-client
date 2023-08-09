@@ -1,6 +1,6 @@
 import {React,useEffect} from "react";
-import TopGainers from "./TopGainers";
-import TopLosers from "./TopLosers";
+// import TopGainers from "./TopGainers";
+// import TopLosers from "./TopLosers";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CryptoTable from "./CryptoTable";
@@ -17,6 +17,7 @@ const Home = () => {
     if (!isLoggedIn) {
       navigate("/login");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

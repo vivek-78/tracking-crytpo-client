@@ -7,6 +7,7 @@ import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useSelector, useDispatch } from "react-redux";
+// eslint-disable-next-line no-unused-vars
 import { addCoin, removeCoin } from "./store/WatchListSlice";
 
 var previousValue = 0;
@@ -58,6 +59,7 @@ const CryptoList = (props) => {
       setCoinData(data?.USD);
     }
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
   useEffect(() => {
     async function changeInPrice() {
