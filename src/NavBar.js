@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { removeAuthToken } from "./store/authTokenSlice";
 import { removeWatchList } from "./store/WatchListSlice";
 import { useDispatch,useSelector } from "react-redux";
+import { toast } from 'react-toastify';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -13,6 +14,9 @@ function NavBar() {
      dispatch(removeAuthToken());
      dispatch(removeWatchList());
      navigate("/login");
+     toast.success('Logged out Successfully', {
+      position: toast.POSITION.TOP_RIGHT
+  });
   }
   return (
     <AppBar

@@ -5,7 +5,7 @@ export default function graph() {
         function fetchData() {
           axios
             .get(
-              `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${coin}&tsym=USD&limit=20&api_key=557770814a82703ce2ed50c174c03264fee9a0117e1dc109f892d1a4f82084fc`
+              `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${coin}&tsym=USD&limit=20&api_key=6706b43124d7e0ea0461ed0aaba8e7f1ce88391081c5059678c0dd8fc9136325`
             )
             .then((fetchedData) => {
               const data = fetchedData.data.Data.Data;

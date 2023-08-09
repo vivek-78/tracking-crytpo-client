@@ -35,8 +35,9 @@ const Login = () => {
       showToastMessage();
       navigate("/");
     } catch(err){
-      console.log(err);
-      alert("enter valid details");
+      toast.error('Enter valid details', {
+        position: toast.POSITION.TOP_RIGHT
+    });
     }
   };
   return (
