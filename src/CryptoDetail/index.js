@@ -13,7 +13,6 @@ const CryptoDetail = (props) => {
       const fetchedData = await axios.get(
         `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coin}&tsyms=usd&api_key=b8be1fb16bcb848129a994cee14b248620fef28d3446ac8a5e1571f82c0e15fe`
       );
-      console.log(fetchedData.data)
       const data = fetchedData?.data?.DISPLAY[coin];
       setCoinData(data?.USD);
     }
