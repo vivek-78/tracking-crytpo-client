@@ -58,7 +58,7 @@ const CryptoList = (props) => {
       setCoinData(data?.USD);
     }
     fetchData();
-  });
+  },[]);
   useEffect(() => {
     async function changeInPrice() {
       await setPriceChange(coinData?.PRICE);
