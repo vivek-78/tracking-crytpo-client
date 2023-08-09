@@ -62,6 +62,7 @@ const CryptoDetailGraph = () => {
       direction="column"
       justifyContent="center"
       alignItems="stretch"
+      style={{marginTop:"2rem"}}
     >
       <Grid
         item
