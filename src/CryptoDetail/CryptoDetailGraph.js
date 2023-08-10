@@ -62,19 +62,19 @@ const CryptoDetailGraph = () => {
       direction="column"
       justifyContent="center"
       alignItems="stretch"
-      style={{marginTop:"2rem"}}
     >
       <Grid
         item
         container
         direction="row"
-        justifyContent="flex-end"
+        justifyContent="flex-start"
         alignItems="center"
         spacing={2}
       >
         <Grid item>
           <Button
             variant="outlined"
+            sx={{marginLeft:"15px"}}
             onClick={() => oneHourClick()}
           >
             1Hr
