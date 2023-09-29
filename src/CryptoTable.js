@@ -9,7 +9,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-// import Cookies from "js-cookie";
+import { toast } from 'react-toastify';
 import WatchList from "./WatchList";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -34,7 +34,9 @@ const CryptoTable = () => {
       const temp = fetchedData?.data;
       setWatchList(temp);
     } catch (err) {
-      alert(err);
+      toast.error('Error in fetching WatchList', {
+        position: toast.POSITION.TOP_RIGHT
+    });
     }
   };
   useEffect(() => {
@@ -53,7 +55,9 @@ const CryptoTable = () => {
       });
       fetchWatchList();
     } catch (err) {
-      alert(err);
+      toast.error('Error in WatchList', {
+        position: toast.POSITION.TOP_RIGHT
+    });
     }
   };
 
